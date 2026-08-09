@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BWL Denkmuster – Spaced Repetition</title>
+<meta name="description" content="Lernplattform für BWL nach dem Prinzip der verteilten Wiederholung – mit Fokus auf ökonomische Denkmuster.">
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">BWL</span>
+    <span class="brand-sub">Denkmuster-Training</span>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab" data-view="lernen">Lernen</button>
+    <button class="tab" data-view="transfer">Transfer</button>
+    <button class="tab" data-view="module">Module</button>
+    <button class="tab" data-view="statistik">Statistik</button>
+    <button class="tab" data-view="karten">Karten</button>
+    <button class="tab" data-view="einstellungen">Einstellungen</button>
+  </nav>
+  <button class="icon-btn" id="themeBtn" title="Design wechseln" aria-label="Design wechseln">◐</button>
+</header>
+
+<main id="view" class="view"></main>
+
+<footer class="footer">
+  <span>Fortschritt wird lokal im Browser gespeichert – regelmäßig unter <em>Einstellungen</em> sichern.</span>
+</footer>
+
+<!-- Inhalte -->
+<script src="assets/js/data/registry.js"></script>
+<script src="assets/js/data/m01-grundlagen.js"></script>
+<script src="assets/js/data/m02-denkmuster.js"></script>
+<script src="assets/js/data/m03-rechnungswesen.js"></script>
+<script src="assets/js/data/m04-kostenrechnung.js"></script>
+<script src="assets/js/data/m05-investition-finanzierung.js"></script>
+<script src="assets/js/data/m06-marketing.js"></script>
+<script src="assets/js/data/m07-produktion-logistik.js"></script>
+<script src="assets/js/data/m08-organisation-personal.js"></script>
+<script src="assets/js/data/m09-strategie.js"></script>
+<script src="assets/js/data/m10-kennzahlen.js"></script>
+
+<!-- Logik -->
+<script src="assets/js/util.js"></script>
+<script src="assets/js/srs.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/stats.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
