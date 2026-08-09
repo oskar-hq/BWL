@@ -30,6 +30,11 @@ BWL.app = (function () {
     aktuelleAnsicht = name;
     antwortSichtbar = false;
     hinweisSichtbar = false;
+    // Adresse mitführen, damit die Verknüpfungen aus dem App-Manifest
+    // auch bei bereits geöffneter App die richtige Ansicht treffen.
+    try {
+      if (history.replaceState) history.replaceState(null, "", "#" + name);
+    } catch (e) { /* bei file:// nicht erlaubt – unkritisch */ }
     Array.prototype.forEach.call(document.querySelectorAll("#tabs .tab"), function (t) {
       t.classList.toggle("active", t.dataset.view === name);
     });
@@ -817,8 +822,22 @@ BWL.app = (function () {
     });
     document.getElementById("themeBtn").addEventListener("click", themeWechseln);
     document.addEventListener("keydown", tasten);
-    go("lernen");
+
+    // Startansicht aus der Adresse übernehmen – so funktionieren die
+    // Verknüpfungen aus dem App-Manifest (z. B. .../#transfer).
+    window.addEventListener("hashchange", function () {
+      var v = ansichtAusHash();
+      if (v && v !== aktuelleAnsicht) { karte = null; transfer = null; go(v); }
+    });
+    go(ansichtAusHash() || "lernen");
   }
+
+  function ansichtAusHash() {
+    var v = (location.hash || "").replace(/^#/, "");
+    return ANSICHTEN.indexOf(v) >= 0 ? v : null;
+  }
+
+  var ANSICHTEN = ["lernen", "transfer", "module", "statistik", "karten", "einstellungen"];
 
   return { init: init, go: go };
 })();

@@ -23,6 +23,30 @@ Der Lernfortschritt wird im `localStorage` des Browsers gespeichert. Unter **Ein
 lässt sich er als JSON-Datei sichern und wieder einspielen – das ist auch der Weg, um auf einem
 zweiten Gerät weiterzulernen.
 
+> **Der Speicher hängt an der Adresse.** `localStorage` ist an die Origin gebunden: Fortschritt
+> von `file://`, von `oskar-hq.github.io` und von `bwl.oskarjacobsen.de` sind drei voneinander
+> unabhängige Stände – ebenso `http` und `https` derselben Domain. Für den Umzug die Sicherung
+> exportieren und auf der neuen Adresse einspielen.
+
+## Live-Adresse
+
+Die Seite läuft über GitHub Pages unter **https://bwl.oskarjacobsen.de**.
+
+## Auf dem Handy installieren
+
+Die App ist eine PWA und läuft nach dem Ersteinsatz vollständig offline.
+
+- **iOS/Safari:** Seite öffnen → Teilen → *Zum Home-Bildschirm*
+- **Android/Chrome:** Seite öffnen → Menü → *App installieren*
+
+Sie startet dann im Vollbild ohne Browserleiste, mit eigenem Icon und eigenem Eintrag im
+App-Umschalter. Über langes Antippen des Icons führen Verknüpfungen direkt in die heutige
+Sitzung, in den Transfer-Drill oder in die Statistik.
+
+Erscheint eine neue Fassung, zeigt die App unten einen Hinweis mit Schaltfläche *Neu laden*.
+Das Update wird erst nach Bestätigung übernommen – eine laufende Lernsitzung wird nie
+unterbrochen, der Fortschritt bleibt erhalten.
+
 ## Aufbau der Sammlung
 
 166 Karten in zehn Modulen:
@@ -91,14 +115,33 @@ SM-2-Variante mit Lernschritten, wie sie aus Anki bekannt ist:
 
 ```
 index.html
+manifest.webmanifest   App-Manifest (Name, Icons, Verknüpfungen)
+sw.js                  Service Worker – Offline-Betrieb und Updates
+CNAME                  Custom Domain für GitHub Pages
+.nojekyll              überspringt den Jekyll-Build
 assets/css/app.css
+assets/icons/          App-Icons (192, 512, maskable, Apple)
 assets/js/util.js      DOM-Helfer, Formatierung
 assets/js/srs.js       Wiederholungsplaner (SM-2)
 assets/js/store.js     Persistenz, Warteschlange, Sicherung
 assets/js/stats.js     Auswertungen
 assets/js/app.js       Ansichten und Interaktion
+assets/js/pwa.js       Registrierung des Service Workers, Update-Hinweis
 assets/js/data/        die zehn Inhaltsmodule
 ```
+
+### Veröffentlichen
+
+Pages-Einstellung: *Deploy from a branch*, Branch `main`, Ordner `/ (root)`. Es gibt keinen
+Build-Schritt – ein `git push` genügt, die neue Fassung steht nach ein bis zwei Minuten.
+
+DNS für die Custom Domain (Subdomain, deshalb ein einzelner Eintrag):
+
+```
+bwl   CNAME   oskar-hq.github.io.
+```
+
+Danach in den Pages-Einstellungen *Enforce HTTPS* aktivieren.
 
 ### Eigene Karten ergänzen
 
@@ -121,4 +164,8 @@ Eine neue Karte ist ein Objekt im `karten`-Array eines Moduls:
 Die `id` muss eindeutig bleiben – der Lernfortschritt hängt daran. In den Texten sind
 `**fett**`, `*kursiv*`, `` `code` `` und Zeilenumbrüche mit `\n` erlaubt.
 Ein neues Modul wird als Datei unter `assets/js/data/` angelegt, ruft `BWL.addModul({…})` auf
-und wird in `index.html` eingebunden.
+und wird in `index.html` **und** in der Liste `ASSETS` in `sw.js` eingetragen.
+
+> **Nach jeder Änderung `VERSION` in `sw.js` erhöhen** (`"v1"` → `"v2"` …). Der Browser erkennt
+> ein Update ausschließlich daran, dass sich diese Datei ändert. Ohne Erhöhung bekommen bereits
+> installierte Geräte weiterhin die alte Fassung aus ihrem Cache.
